@@ -34,6 +34,7 @@ final class FriendsVC: UIViewController {
         setupViews()
         setupConstraints()
         viewModel.fetchFriends(bindTo: tableView)
+        navigationItem.hidesBackButton = true
     }
     
     //MARK: - private
