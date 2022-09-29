@@ -25,7 +25,11 @@ class AuthVC: UIViewController {
         
         setupViews()
         setupConstraints()
-        //loadURL()
+        
+        if Session.isTokenValid {
+            showMainTabBarScreen()
+            return
+        }
         authorizeVK()
     }
     
@@ -40,7 +44,6 @@ class AuthVC: UIViewController {
     }
 
     private func authorizeVK(){
-    //https://oauth.vk.com/authorize?client_id=1&display=page&redirect_uri=http://example.com/callback&scope=friends&response_type=code&v=5.131
         
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
@@ -60,9 +63,14 @@ class AuthVC: UIViewController {
         let request = URLRequest.init(url: url)
         webView.load(request)
     }
-
+    
+    //MARK: - Navigation
+    private func showMainTabBarScreen() {
+        let mainTabBarVC = MainTabBarVC()
+        navigationController?.pushViewController(mainTabBarVC, animated: true)
+    }
 }
-
+//MARK: - Extension
 extension AuthVC: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
@@ -84,11 +92,13 @@ extension AuthVC: WKNavigationDelegate {
         guard let token = params["access_token"], let expiresIn = params["expires_in"], let userId = params["user_id"] else { return }
         
         Session.shared.token = token
-        Session.shared.expiresIn = Int(expiresIn) ?? 0
+        print(token)
         Session.shared.userId = Int(userId) ?? 0
         
-        let mainTabBarVC = MainTabBarVC()
-        self.navigationController?.pushViewController(mainTabBarVC, animated: true)
+        let tokenDate = Date.init(timeIntervalSinceNow: Double(expiresIn) ?? 0)
+        Session.shared.expiresIn = tokenDate
+        
+        showMainTabBarScreen()
         
         decisionHandler(.cancel)
     }

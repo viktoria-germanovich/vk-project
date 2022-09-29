@@ -24,25 +24,27 @@ final class FriendsAPI {
             URLQueryItem.init(name: "offset", value: "\(offset)"),
             URLQueryItem.init(name: "fields", value: "photo_100,online"),
             
-            URLQueryItem.init(name: "v", value: "5.131"),
+            URLQueryItem.init(name: "v", value: Session.shared.version),
             URLQueryItem.init(name: "access_token", value: "\(Session.shared.token)")
         ]
         
         guard let url = urlComponents.url else { return }
         
         let request = URLRequest(url: url)
-        
+
         URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let jsonData = data else { return }
-            let friendsResponse = try? JSONDecoder().decode(FriendsResponse.self, from: jsonData)
-            let friends = friendsResponse?.response.items ?? []
-            let friendsCount = friendsResponse?.response.count ?? 0
-            
-            DispatchQueue.main.async {
-                compeltion(friends, friendsCount)
+            do {
+                guard let jsonData = data else { return }
+                let friendsResponse = try JSONDecoder().decode(FriendsResponse.self, from: jsonData)
+                let friends = friendsResponse.response.items
+                let friendsCount = friendsResponse.response.count
+                
+                DispatchQueue.main.async {
+                    compeltion(friends, friendsCount)
+                }
+            } catch {
+                print(error)
             }
-            
         }.resume()
-        
     }
 }
