@@ -34,7 +34,6 @@ final class NewsFeedAPI {
             
             do {
                 guard let jsonData = data else { return }
-                //print(jsonData.prettyJson)
                 let postResponse = try JSONDecoder().decode(PostResponse.self, from: jsonData)
                 
                 let posts = postResponse.response.items
@@ -61,22 +60,16 @@ final class NewsFeedAPI {
                     var authorName = ""
                     var authorImageUrl = ""
                     
-                    //groups -id, profiles +id
                     if post.sourceID < 0 {
-                        
                         let group = groups?.first(where: { $0.id == abs(post.sourceID) } )
-                        
                         authorName = group?.name ?? ""
                         authorImageUrl = group?.photo200 ?? ""
                         
                     } else {
-                        
                         let profile = profiles?.first(where: { $0.id == post.sourceID})
-                        
                         authorName = "\(profile?.firstName ?? "") \(profile?.lastName ?? "")"
                         authorImageUrl = profile?.photo100 ?? ""
                     }
-                    
                     let cellModel = PostCellModel.init(authorName: authorName,
                                                        authorImageUrl: authorImageUrl,
                                                        text: text,
@@ -86,7 +79,6 @@ final class NewsFeedAPI {
                                                        viewsCount: viewsCount )
                     cellModels.append(cellModel)
                 }
-                
                 DispatchQueue.main.async {
                     compeltion(cellModels)
                 }
