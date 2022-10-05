@@ -7,9 +7,15 @@
 
 import Foundation
 
+enum NetworkError: Error {
+    case badURL
+    case decodingError
+    case noData
+}
+
 final class FriendsAPI {
     
-    func fetchFriends(offset: Int = 0 , compeltion: @escaping([Friend], Int)->()){
+    func fetchFriends(offset: Int = 0 ) async throws-> ([Friend], Int) {
         
         var urlComponents = URLComponents()
         
@@ -28,23 +34,13 @@ final class FriendsAPI {
             URLQueryItem.init(name: "access_token", value: "\(Session.shared.token)")
         ]
         
-        guard let url = urlComponents.url else { return }
-        
+        guard let url = urlComponents.url else { throw NetworkError.badURL }
         let request = URLRequest(url: url)
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            do {
-                guard let jsonData = data else { return }
-                let friendsResponse = try JSONDecoder().decode(FriendsResponse.self, from: jsonData)
-                let friends = friendsResponse.response.items
-                let friendsCount = friendsResponse.response.count
-                
-                DispatchQueue.main.async {
-                    compeltion(friends, friendsCount)
-                }
-            } catch {
-                print(error)
-            }
-        }.resume()
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let friendsResponse = try? JSONDecoder().decode(FriendsResponse.self, from: data)
+        let friends = friendsResponse?.response.items ?? []
+        let friendsCount = friendsResponse?.response.count ?? 0
+        
+        return ( friends, friendsCount )
     }
 }

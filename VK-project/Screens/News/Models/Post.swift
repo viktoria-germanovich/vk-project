@@ -159,7 +159,6 @@ struct FluffyLikes: Codable {
 struct Profile: Codable {
     let online, id: Int
     let photo100: String
-    //let deactivated: String
     let photo50: String
     let lastName: String
     let sex: Int
@@ -168,7 +167,6 @@ struct Profile: Codable {
     enum CodingKeys: String, CodingKey {
         case online, id
         case photo100 = "photo_100"
-        //case deactivated
         case photo50 = "photo_50"
         case lastName = "last_name"
         case sex

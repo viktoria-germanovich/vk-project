@@ -7,7 +7,6 @@
 
 import UIKit
 import WebKit
-//OAuth
 
 class AuthVC: UIViewController {
 
@@ -15,7 +14,6 @@ class AuthVC: UIViewController {
     private lazy var webView: WKWebView = {
         let webView = WKWebView()
         webView.navigationDelegate = self
-        
         return webView
     }()
     
@@ -36,7 +34,6 @@ class AuthVC: UIViewController {
     //MARK: - Private
     private func setupViews(){
         view.addSubview(webView)
-        
     }
     
     private func setupConstraints() {
@@ -92,7 +89,6 @@ extension AuthVC: WKNavigationDelegate {
         guard let token = params["access_token"], let expiresIn = params["expires_in"], let userId = params["user_id"] else { return }
         
         Session.shared.token = token
-        print(token)
         Session.shared.userId = Int(userId) ?? 0
         
         let tokenDate = Date.init(timeIntervalSinceNow: Double(expiresIn) ?? 0)
