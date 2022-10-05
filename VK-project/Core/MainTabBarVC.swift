@@ -19,16 +19,6 @@ class MainTabBarVC: UITabBarController {
         return friendsVC
     }()
     
-    var videosVC: VideosVC = {
-        let videosVC = VideosVC()
-        let videosTabBarItem = UITabBarItem()
-        videosTabBarItem.image = UIImage(systemName: "video")
-        videosTabBarItem.title = "Видео"
-        videosVC.tabBarItem = videosTabBarItem
-        
-        return videosVC
-    }()
-    
     var groupsVC: GroupsVC = {
         let groupsVC = GroupsVC()
         let groupsTabBarItem = UITabBarItem()

@@ -8,7 +8,6 @@
 import Foundation
 import SwiftKeychainWrapper
 
-// Класс-сервис - хранение и управление токеном
 final class Session {
     
     private init() {}
