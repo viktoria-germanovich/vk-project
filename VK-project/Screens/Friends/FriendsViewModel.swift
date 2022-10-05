@@ -21,33 +21,41 @@ final class FriendsViewModel {
     private var friendsCount: Int = 0
     
     func fetchFriends( bindTo tableView: UITableView) {
-        friendsAPI.fetchFriends { friends, count in
-            
-            var optionalFriends: Array<Optional<Friend>> = []
-            
-            for friend in friends {
-                optionalFriends.append(friend)
+        
+        Task {
+            do {
+                let ( friends, count ) = try await friendsAPI.fetchFriends()
+                var optionalFriends: Array<Optional<Friend>> = []
+                for friend in friends {
+                    optionalFriends.append(friend)
+                }
+        
+                self.friendsCount = count
+                self.friendsArchiver.save(friends)
+                let savedFriends = self.friendsArchiver.retrieve()
+                self.friends = savedFriends
+                
+                await tableView.reloadData()
+                
+            } catch {
+                print("Request failed with error: \(error)")
             }
-            self.friendsCount = count
-            
-            self.friendsArchiver.save(friends)
-            
-            let savedFriends = self.friendsArchiver.retrieve()
-            
-            self.friends = savedFriends
-            
-            tableView.reloadData()
         }
     }
     
     func prefetchFriends( bindTo tableView: UITableView) {
         isFriendsLoading = true
-        friendsAPI.fetchFriends(offset: friends.count) { friends, count in
-            self.friends.append(contentsOf: friends )
-            self.friendsCount = count
-            tableView.reloadData()
-            
-            self.isFriendsLoading = false
+        Task {
+            do {
+                let ( friends, count ) = try await friendsAPI.fetchFriends()
+                self.friends.append(contentsOf: friends )
+                self.friendsCount = count
+                await tableView.reloadData()
+                
+                self.isFriendsLoading = false
+            } catch {
+                print("Request failed with error: \(error)")
+            }
         }
     }
 }

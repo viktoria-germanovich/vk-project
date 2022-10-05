@@ -17,7 +17,7 @@ struct PostCellModel {
     
     //MARK: - Photo
     var photoUrl: String
-    var aspectRatio: Double //600:300 -> height/width -> 1.5 width(screen) = 1 height 1.5
+    var aspectRatio: Double 
     
     //MARK: - Likes and Views
     var likesCount: Int

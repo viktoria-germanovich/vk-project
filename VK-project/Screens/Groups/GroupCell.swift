@@ -13,7 +13,7 @@ protocol GroupCellInput {
 }
 class GroupCell: UITableViewCell, GroupCellInput {
     
-    //MARK: - properties
+    //MARK: - internal properties
     static let reuseId = "GroupCell"
     
     var photoImageView: UIImageView = {

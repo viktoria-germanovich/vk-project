@@ -81,13 +81,11 @@ extension NewsFeedVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return PostCellType.allCases.count //4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        //1 новость - 1 секция
         let post = posts[indexPath.section]
         
         if let cellType = PostCellType.init(rawValue: indexPath.row) {
