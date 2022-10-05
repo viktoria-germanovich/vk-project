@@ -63,7 +63,6 @@ extension FriendsVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: FriendCell.reuseId, for: indexPath) as! FriendCell
-        
         let friend = viewModel.friends[indexPath.row]
         cell.configure(friend)
         

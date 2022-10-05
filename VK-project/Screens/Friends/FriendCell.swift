@@ -68,10 +68,8 @@ class FriendCell: UITableViewCell, FriendCellInput {
     
     //MARK: - public
     func configure(_ model: Friend) {
-        
         let url = URL.init(string: model.photo100)
         photoImageView.sd_setImage(with: url)
-        
         nameLabel.text = "\(model.firstName) \(model.lastName)"
     }
 }

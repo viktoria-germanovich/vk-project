@@ -15,13 +15,11 @@ final class FriendsViewModel {
     var friendsCanLoad: Bool {
         return friends.count < friendsCount
     }
-    
     private var friendsAPI = FriendsAPI()
     private var friendsArchiver = FriendsArchiverImpl()
     private var friendsCount: Int = 0
     
     func fetchFriends( bindTo tableView: UITableView) {
-        
         Task {
             do {
                 let ( friends, count ) = try await friendsAPI.fetchFriends()
