@@ -39,10 +39,20 @@ class MainTabBarVC: UITabBarController {
         return groupsVC
     }()
     
+    var newsVC: NewsFeedVC = {
+        let groupsVC = NewsFeedVC()
+        let groupsTabBarItem = UITabBarItem()
+        groupsTabBarItem.image = UIImage(systemName: "newspaper")
+        groupsTabBarItem.title = "Новости"
+        groupsVC.tabBarItem = groupsTabBarItem
+        
+        return groupsVC
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let controllers: [UIViewController] = [friendsVC, videosVC, groupsVC]
+        let controllers: [UIViewController] = [friendsVC, groupsVC, newsVC]
         self.viewControllers = controllers
     }
     

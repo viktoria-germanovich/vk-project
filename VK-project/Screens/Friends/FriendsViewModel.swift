@@ -17,12 +17,25 @@ final class FriendsViewModel {
     }
     
     private var friendsAPI = FriendsAPI()
+    private var friendsArchiver = FriendsArchiverImpl()
     private var friendsCount: Int = 0
     
     func fetchFriends( bindTo tableView: UITableView) {
         friendsAPI.fetchFriends { friends, count in
-            self.friends = friends
+            
+            var optionalFriends: Array<Optional<Friend>> = []
+            
+            for friend in friends {
+                optionalFriends.append(friend)
+            }
             self.friendsCount = count
+            
+            self.friendsArchiver.save(friends)
+            
+            let savedFriends = self.friendsArchiver.retrieve()
+            
+            self.friends = savedFriends
+            
             tableView.reloadData()
         }
     }
